@@ -23,5 +23,32 @@ function RestaurantDetails() {
        <RestroTabs restaurant={restaurant}/>
     </div>
   )
+  function Checkout() {
+  const SendEmail = async () => {
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user?.primaryEmailAddress.emailAddress,
+        }),
+      });
+
+      if (!response.ok) {
+        toast('Error while sending email');
+      }
+    } catch (err) {
+      toast('Error while sending email');
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={SendEmail}>Send Email</button>
+    </div>
+  );
+}
 }
 export default RestaurantDetails
