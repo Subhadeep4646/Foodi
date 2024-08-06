@@ -1,56 +1,38 @@
-"use client";
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import GlobalApi from '../_utils/GlobalApi';
-import BusinessItem from './Businessitem';
-import Businessitemskelton from './Businessitemskelton';
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
- function BusinessList() {
-  const params = useSearchParams();
-  const [category, setCategory] = useState('all');
-  const [businessList, setBusinessList] = useState([]);
-  const[loading,setLoading]=useState(false)
+const BusinessItem = ({ business }) => {
+  console.log("Slug:", business.id); // Check if business.slug is defined here
 
-  useEffect(() => {
-    const categoryParam = params.get('category') || 'all';
-    setCategory(categoryParam.trim());
-    getBusinessList(categoryParam.trim());
-  }, [params]);
-
-  const getBusinessList = async (category_) => {
-    try {
-      setLoading(true);
-      console.log('Fetching businesses for category:', category_);
-      const response = await GlobalApi.GetBusiness(category_);
-      setLoading(false);
-      console.log('Businesses fetched:', response);
-      if (response && response.restaurants) {
-        setBusinessList(response.restaurants);
-      } else {
-        setBusinessList([]); // Handle empty response
-      }
-    } catch (error) {
-      console.error('Error fetching business list:', error);
-      setBusinessList([]);
-    }
-  };
-            
   return (
-    <div className='mt-5'>
-      <h2 className='font-bold text-2xl'>Popular {category} Restaurants</h2>
-      <h2 className='font-bold text-primary'>{businessList.length} Results</h2>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap- mt-3'>
-        {!loading?businessList.map((restaurant, index) => (
-          <BusinessItem key={index} business={restaurant} />
-        )):
-        [1,2,3,4,5,6,7,8].map((item,index)=>(
-         <Businessitemskelton/>
-
-        ))
-      }
+    <Link href={'/restaurant/'+business.id}
+    className="border rounded-xl p-4 mb-4 shadow-lg hover:border-primary cursor-pointer hover:bg-orange-100">
+      <div className="relative h-40 w-full rounded-xl overflow-hidden">
+        <Image 
+          src={business?.banner?.url || '/default-image.jpg'} 
+          alt={business?.name || 'Restaurant Image'}
+          layout="fill"
+          objectFit="cover"
+        />
       </div>
-    </div>
+      <div className="mt-2">
+        <h2 className="font-bold text-lg">{business?.name}</h2>
+        <div className="flex justify-between items-center mt-1">
+          <div className="flex items-center gap-2">
+            <Image src="/star.png" alt="star" width={14} height={14} />
+            <label className="text-gray-400 text-sm">4.5</label>
+            {business?.restroType && (
+              <h2 className="text-gray-400 text-sm">{business.restroType[0]}</h2>
+            )}
+          </div>
+          {business?.categories && (
+            <h2 className="text-sm text-primary">{business.categories[0]?.name}</h2>
+          )}
+        </div>
+      </div>
+    </Link>
   );
 }
 
-export default BusinessList;
+export default BusinessItem;
