@@ -110,8 +110,23 @@ const GetBusinessDetail = async (businessid) => {
     return null;
   }
 }
+const AddtoCart=async(data)=>{
+  const query=gql`
+  mutation Addtocart {
+  createUserCart(
+    data: {email: "`+data?.email+`", price:`+data.price+`,
+     productDescription: "`+data.description+`", productName: "`+data.name+`", productimage: "`+data.productImage+`"}
+  ) {
+    id
+  }
+  publishManyUserCarts(to: PUBLISHED) {
+    count
+  }
+}`
+}
 export default {
   GetCategory,
   GetBusiness,
   GetBusinessDetail,
+  AddtoCart
 };
