@@ -14,6 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
+<PaypalScriptProvider options=({Clientid="test"})></PaypalScriptProvider>
     <html lang="en">
       <body className={inter.className}>
      <Provider>{children}</Provider>
