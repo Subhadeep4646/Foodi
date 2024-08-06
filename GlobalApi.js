@@ -124,9 +124,22 @@ const AddtoCart=async(data)=>{
   }
 }`
 }
+
+const DisconnectRestrofromUserCartItem=async(id)=>{
+  const query=gql`
+  mutation DisconnectRestrofromUserCartItem{
+  updateUserCart(data:{restaurant:disconnect:true}},where :{id:"`+id+`"})
+  pusblishManyUserCarts{to:published}{
+  count
+  }
+ } `;
+ const result=await request{MASTER_URL,query1};
+ return result;
+}
 export default {
   GetCategory,
   GetBusiness,
   GetBusinessDetail,
-  AddtoCart
+  AddtoCart,
+  DisconnectRestrofromUserCartItem
 };
