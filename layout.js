@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-<PaypalScriptProvider options=({Clientid="test"})></PaypalScriptProvider>
+<PaypalScriptProvider options=({Clientid=process.env.NEXT_PUBLIC_PAYPAL_CLIENT_IDovider>
     <html lang="en">
       <body className={inter.className}>
      <Provider>{children}</Provider>
